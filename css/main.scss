@@ -211,9 +211,25 @@
 // Make NFT css
 
 #make{
+
     position: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 200px;
+    
 }
 
+
+#textarea_field{
+    height: 250px;
+    font-size: 20px;
+}
+
+#name_field{
+    font-size: 20px;
+}
+
+#Submit{
+    margin-left: 10px;
+    width: 100px;
+}

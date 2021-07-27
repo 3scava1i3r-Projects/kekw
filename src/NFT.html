@@ -33,14 +33,27 @@
     </nav>
 
     <div id="make">
-        <h1>input your NFT</h1>
+        
+
+        <div class="nes-field">
+        <label style="font-size: 20px;" for="name_field">NFT Name</label>
+        <input type="text" id="name_field" class="nes-input">
+        </div>
+
+        <div class="nes-field">
+        <label style="font-size: 20px;" for="textarea_field">Description</label>
+        <textarea id="textarea_field" class="nes-textarea"></textarea>
+        </div>
+
+        <h2>Input your NFT</h2>
         <label class="nes-btn">
-        <span>Select your file</span>
+        <span >Select your file</span>
         <input type="file" id="nft-file-input">
         </label>
+
+        <button type="button" class="nes-btn" id="Submit">Submit</button>
+
     </div>
-
-
 
 
 
@@ -58,65 +71,14 @@
     <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js"
     integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
     crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dotenv@10.0.0/lib/main.min.js"></script>
-
-
-    <form action="" method="POST" enctype="multipart/form-data" class="dropzone " role="form">        
-        <div class="dropzone" id="dropzone"></div>
-        <div class="dropzonePreview dropzone"></div>
-    </form>
-    <div id="response_from_upload"></div>
-  </body>
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js" integrity="sha512-VQQXLthlZQO00P+uEu4mJ4G4OAgqTtKG1hri56kQY1DtdLeIqhKUp9W/lllDDu3uN3SnUNawpW7lBda8+dSi7w==" crossorigin="anonymous"></script>
-
-  <script>
-
-        Dropzone.autoDiscover = false;
-
-        
-        const pinataApiKey = "a770d310d147135d5ec4";
-        const pinataSecretApiKey = "076b05a1c38c2910d32a8079e1007d52b8c02264990e0af61fa0e544cd760c78";
-
-        $('#dropzone').dropzone({
-            previewsContainer: ".dropzonePreview",
-            url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-            //maxFilesize: 2, 
-            //maxFiles: 1,
-            acceptedFiles: ".jpeg,.jpg,.png",
-            //uploadMultiple: true,
-            //parallelUploads: 1,
-            headers: {                
-                pinata_api_key: pinataApiKey, 
-                pinata_secret_api_key: pinataSecretApiKey,
-            },
-            init: function() {
-                this.on("sending", function(file, xhr, formData){                        
-                        const metadata = JSON.stringify({
-                            name: 'testname',
-                            keyvalues: {
-                                exampleKey: 'exampleValue'
-                            }
-                        });
-                        console.log(file)
-                        formData.append('pinataMetadata', metadata);
-                        console.log(formData)
-                });
-            },
-            error: function(file, message) {
-                console.log("ERROR: ", message.error);
-            },
-            success:function(file, response) {                                        
-                console.log("SUCCESS: ", response);                
-                $('#response_from_upload').html("Response: " + response.IpfsHash); 
-            }
-        });
-
-
-</script>
 
 
 </body>
 
 </html>
+
+
+
+<!-- 
+ganache-cli --fork https://matic.getblock.io/mainnet/?api_key=53adeee6-ff92-47ad-b330-c8e76391730d
+ -->
