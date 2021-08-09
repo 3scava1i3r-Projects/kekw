@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Cute+Font&display=swap");
 *,
 *:after *:before {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -10,19 +11,30 @@
   font-family: "Cute Font";
   background-color: #10451d;
   color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 #header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   position: absolute;
   width: 98%;
   top: 0;
   left: 0;
   padding: 10px 2px;
-  justify-content: space-between;
-  align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 #header a .logo {
@@ -33,9 +45,15 @@
 }
 
 #header ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 #header ul li {
@@ -74,8 +92,12 @@
   float: left;
   max-width: 25%;
   margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-left: 25px;
 }
 
@@ -88,7 +110,8 @@
 }
 
 #card:hover {
-  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
   opacity: 0.9;
 }
 
@@ -158,12 +181,13 @@
   float: left;
   max-width: 9%;
   border-radius: 10px;
-  margin-left: 1.4%;
+  margin-left: 1.40%;
   margin-bottom: 10px;
 }
 
 #meme-card:hover {
-  transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
   opacity: 0.9;
 }
 
@@ -243,8 +267,12 @@
   float: left;
   max-width: 25%;
   margin-bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-left: 25px;
 }
 
@@ -257,7 +285,8 @@
 }
 
 #mcard:hover {
-  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
   opacity: 0.9;
 }
 
@@ -294,3 +323,4 @@
   margin-right: auto;
   width: 200px;
 }
+/*# sourceMappingURL=main.css.map */

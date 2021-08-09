@@ -101,8 +101,8 @@ document.getElementById("nft-file-input").addEventListener("change", function _c
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          pinataApiKey = "a770d310d147135d5ec4";
-          pinataSecretApiKey = "076b05a1c38c2910d32a8079e1007d52b8c02264990e0af61fa0e544cd760c78";
+          pinataApiKey = process.env.pinataApiKey;
+          pinataSecretApiKey = process.env.pinataSecretApiKey;
           url = "https://api.pinata.cloud/pinning/pinFileToIPFS";
           jsonUrl = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
           data = new FormData();
@@ -138,7 +138,7 @@ document.getElementById("nft-file-input").addEventListener("change", function _c
               console.log("metadata url = https://ipfs.io/ipfs/".concat(res.data.IpfsHash));
               var gg = "https://ipfs.io/ipfs/".concat(res.data.IpfsHash);
               metadata_hash = gg;
-              console.log("image uploaded");
+              swal("image uploaded");
             });
           })["catch"](function (error) {
             console.log(error);
@@ -182,7 +182,7 @@ document.getElementById("Submit").addEventListener("click", function _callee2() 
                         data: contract.methods.mintNFT(selectedACC, tokenURI).encodeABI()
                       }]
                     }).then(function (result) {
-                      console.log(result); // The result varies by by RPC method.
+                      console.log(result); // The result varies by  RPC method.
                       // For example, this method will return a transaction hash hexadecimal string on success.
                     })["catch"](function (error) {
                       console.log(error);

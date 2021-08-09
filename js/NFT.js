@@ -76,9 +76,9 @@ web3btn.addEventListener("click", () => {
 
 document.getElementById("nft-file-input").addEventListener("change", async (res) => {
   
-  const pinataApiKey = "a770d310d147135d5ec4"; 
+  const pinataApiKey = process.env.pinataApiKey; 
   const pinataSecretApiKey =
-    "076b05a1c38c2910d32a8079e1007d52b8c02264990e0af61fa0e544cd760c78";
+    process.env.pinataSecretApiKey;
   const url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
   const jsonUrl = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
@@ -121,7 +121,7 @@ document.getElementById("nft-file-input").addEventListener("change", async (res)
           let gg = `https://ipfs.io/ipfs/${res.data.IpfsHash}`
           metadata_hash = gg
           
-          console.log("image uploaded")
+          swal("image uploaded")
         })
     })
     .catch(function (error) {
@@ -165,7 +165,7 @@ document.getElementById("Submit").addEventListener("click" ,async() => {
       })
       .then((result) => {
         console.log(result);
-        // The result varies by by RPC method.
+        // The result varies by  RPC method.
         // For example, this method will return a transaction hash hexadecimal string on success.
       })
       .catch((error) => {

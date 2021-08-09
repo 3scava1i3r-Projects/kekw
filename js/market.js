@@ -6,7 +6,6 @@ const WalletConnectProvider = window.WalletConnectProvider.default;
 let selectedACC;
 let chainId;
 
-
 const ConnectWallet = async () => {
   const providerOptions = {
     walletconnect: {
@@ -45,84 +44,59 @@ const ConnectWallet = async () => {
 web3btn.addEventListener("click", () => {
   ConnectWallet();
   setTimeout(() => {
-      getNftBalance()
+    getNftBalance();
   }, 2000);
 });
 
-
-const getNftBalance = async() => {
-
+const getNftBalance = async () => {
   const options = { method: "GET" };
+
+  // bsc testnet api link => https://api.covalenthq.com/v1/97/address/0x55590DcD461Ce79eB2280Cd1446932b46112AFc9/balances_v2/?key=ckey_62dc169a991f4d7ebe7dd52afef:?nft=true
   fetch(
     "https://testnets-api.opensea.io/api/v1/assets?format=json&limit=40&offset=0&order_direction=desc&owner=0x55590DcD461Ce79eB2280Cd1446932b46112AFc9",
     options
-  ).then((s) => s.json())
-  .then((char) => {
-    char.assets.map((res, i ) => {
-      try {
-        let image;
+  )
+    .then((s) => s.json())
+    .then((char) => {
+      char.assets.map((res, i) => {
+        try {
+          let image;
 
-        console.log(res.image_url)
-        if(res.image_url === ("" && null && undefined)){
-          image =
-            "https://vignette2.wikia.nocookie.net/assassinscreed/images/3/39/Not-found.jpg/revision/latest?cb=20110517171552";
-        }
-        else{
-          image = res.image_url
-        }
-        const gg = document.getElementById("nft-balance");
-        const content = `
-                        <div id="container">
-                            <div id="card">
+          if (res.image_url === ("" && null && undefined)) {
+            image =
+              "https://vignette2.wikia.nocookie.net/assassinscreed/images/3/39/Not-found.jpg/revision/latest?cb=20110517171552";
+          } else {
+            image = res.image_url;
+          }
+          const gg = document.getElementById("market-area");
+          const content = `
+                        <div id="mcontainer">
+                            <div id="mcard">
                                 <div id="content">
                                 <img src="${image}" alt="NFT image" id="nftimg" >
                                     <h2>${res.name}</h2>
                                     <h3>${res.asset_contract.address}</h3>
+                                    <h3>Price:</h3>
                                     <p>${res.asset_contract.asset_contract_type}</p>
-                                    <a class="nes-btn" href="${res.permalink}">More info on the nft</a>
+                                    <a class="nes-btn" href="">Buy</a>
+
                                 </div>
                             </div>
                         </div>
                         `;
-        gg.innerHTML += content; 
+          gg.innerHTML += content;
+        } catch (e) {
+          console.log(e);
+        }
+      });
+    });
 
-      } catch (e) {
-        console.log(e)
-      }
-    })
-  });
-
-  /* const Moralis = window.Moralis;
+  /* let Moralis = window.Moralis;
 
   Moralis.initialize("qaLhTI9RB5qlTnmeWGChjHfPHVSV5innftpvJBmK");
   Moralis.serverURL = "https://np6vdm0epmsi.moralisweb3.com:2053/server";
   const testnetNFTs = await Moralis.Web3.getNFTs({
     address: selectedACC,
-    chain: "rinkeby",
+    chain: "binance",
   }); */
-
-  testnetNFTs.map((res, i) => {
-    
-      try {
-
-        /* const gg = document.getElementById("nft-balance");
-        const content = `
-                        <div id="container">
-                            <div id="card">
-                                <div id="content">
-                                <img src="${res}" alt="NFT image" id="nftimg" >
-                                    <h2>${res.name}</h2>
-                                    <h3>${res.token_address}</h3>
-                                    <p>${res.contract_type}</p>
-                                    <a href="https://testnets.opensea.io/assets/${res.token_address}/${res.token_id}">More info on the nft</a>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-        gg.innerHTML += content; */
-      } catch (error) {
-        console.log(error);
-      }
-  });
-}
-
+};

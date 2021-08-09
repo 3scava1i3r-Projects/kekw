@@ -83,18 +83,20 @@
 // card css
 
 #container {
-    
-    max-width: 23%;
+    float: left;
+    max-width: 25%;
     margin-bottom:  10px;
-    margin-right: 10px;
-    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25px;
 }
 
 #card {
     background-color: #3A6351;
-    max-width: 100%;
+    width: 350px;
     height: 500px;
     border-radius: 10px;
+    font-size: 15px;
 }
 
 #card:hover {
@@ -107,15 +109,31 @@
     width: 200px;
     height: 200px;
     border-radius: 5px;
-    margin-left: 22%;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
     margin-top:20px;
+    margin-bottom: 20px;
 }
 
 #card h2{
-    text-align: center;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #card h3 {
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: center;
 }
 
@@ -124,10 +142,12 @@
 }
 
 #card a {
-    
+    text-align: center;
     text-decoration: none;
-    color: #ffffff;
-    margin-left: 36%;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 200px;
 }
 
 // create css
@@ -232,4 +252,81 @@
 #Submit{
     margin-left: 10px;
     width: 100px;
+}
+
+
+#index-main {
+    margin-top: 100px;
+    text-align: center;
+    font-size: 30px;
+}
+
+#yt-vid{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+// ----------------------
+
+#market-area{
+    margin-top: 200px;
+}
+
+#mcontainer {
+    float: left;
+    max-width: 25%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25px;
+}
+
+#mcard {
+    background-color: #3A6351;
+    width: 350px;
+    height: 450px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+#mcard:hover {
+
+    transform: scale(1.2);
+    opacity: 0.9;
+}
+
+
+#mcard h2 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#mcard h3 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: nowrap;
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+#mcard p {
+    text-align: center;
+}
+
+#mcard a {
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
 }
