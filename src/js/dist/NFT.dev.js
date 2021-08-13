@@ -4,86 +4,29 @@ var web3btn = document.getElementById("web3connect");
 var acc = document.getElementById("acc");
 var test = document.getElementById("test");
 var meme = document.getElementById("meme-image");
-var contractAddress = "0x248dD7b699042C53fAc61A8f4efA15f413E5477b";
-var contract_json;
-fetch("../artifacts/MyNFT.json").then(function (res) {
-  return res.json();
-}).then(function (result) {
-  contract_json = result;
-});
-var Web3Modal = window.Web3Modal["default"];
-var WalletConnectProvider = window.WalletConnectProvider["default"];
 var selectedACC;
 var metadata_hash = null;
 var nonce_needed = null;
 var contract = null;
 var NFTName = null;
 var NFTDescription = null;
+var Token_Contract_address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+window.Moralis.initialize("blsLc1NuNfu2igM14Qm8LTlUe39ZgtDoTxivCCPE");
+window.Moralis.serverURL = "https://kndishhdb8oi.moralisweb3.com:2053/server";
 
-var ConnectWallet = function ConnectWallet() {
-  var providerOptions, web3Modal, provider, web3, accounts, chainId, nftContract, nonce;
-  return regeneratorRuntime.async(function ConnectWallet$(_context) {
+var init = function init() {
+  return regeneratorRuntime.async(function init$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          providerOptions = {
-            walletconnect: {
-              "package": WalletConnectProvider,
-              // required
-              options: {
-                infuraId: "d4c7101b7a7e45fd8adaaf71881b6be4" // required
+          _context.next = 2;
+          return regeneratorRuntime.awrap(Moralis.Web3.enable());
 
-              }
-            },
-            portis: {
-              "package": Portis,
-              // required
-              options: {
-                id: "b7d059de-0fea-4fbf-a725-143562297c30" // required
-
-              }
-            }
-          };
-          web3Modal = new Web3Modal({
-            providerOptions: providerOptions // required
-
-          });
-          _context.next = 4;
-          return regeneratorRuntime.awrap(web3Modal.connect());
+        case 2:
+          window.web3 = _context.sent;
+          console.log(window);
 
         case 4:
-          provider = _context.sent;
-          web3 = new Web3(provider);
-          _context.next = 8;
-          return regeneratorRuntime.awrap(web3.eth.getAccounts());
-
-        case 8:
-          accounts = _context.sent;
-          _context.next = 11;
-          return regeneratorRuntime.awrap(web3.eth.net.getId());
-
-        case 11:
-          chainId = _context.sent;
-          console.log(chainId);
-          selectedACC = accounts[0];
-          acc.innerText = selectedACC;
-          nftContract = new web3.eth.Contract(contract_json.abi, contractAddress);
-          contract = nftContract;
-          console.log(contract);
-          _context.next = 20;
-          return regeneratorRuntime.awrap(web3.eth.getTransactionCount(selectedACC, "latest"));
-
-        case 20:
-          nonce = _context.sent;
-          nonce_needed = nonce.toString();
-
-          if (selectedACC != null | undefined) {
-            console.log(selectedACC);
-          } else {
-            console.log("yo! connect the damn wallet");
-          }
-
-        case 23:
         case "end":
           return _context.stop();
       }
@@ -91,15 +34,70 @@ var ConnectWallet = function ConnectWallet() {
   });
 };
 
-;
+init();
+
+var ConnectWallet = function ConnectWallet() {
+  var user, accounts, chainId;
+  return regeneratorRuntime.async(function ConnectWallet$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(Moralis.Web3.authenticate());
+
+        case 3:
+          user = _context2.sent;
+
+          if (!user) {
+            _context2.next = 13;
+            break;
+          }
+
+          _context2.next = 7;
+          return regeneratorRuntime.awrap(web3.eth.getAccounts());
+
+        case 7:
+          accounts = _context2.sent;
+          _context2.next = 10;
+          return regeneratorRuntime.awrap(web3.eth.net.getId());
+
+        case 10:
+          chainId = _context2.sent;
+          selectedACC = accounts[0];
+          acc.innerText = selectedACC;
+
+        case 13:
+          if (selectedACC != null | undefined) {
+            console.log(selectedACC);
+          } else {
+            console.log("yo! connect the damn wallet");
+          }
+
+          _context2.next = 19;
+          break;
+
+        case 16:
+          _context2.prev = 16;
+          _context2.t0 = _context2["catch"](0);
+          console.log(_context2.t0);
+
+        case 19:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 16]]);
+};
+
 web3btn.addEventListener("click", function () {
   ConnectWallet();
 });
 document.getElementById("nft-file-input").addEventListener("change", function _callee(res) {
   var pinataApiKey, pinataSecretApiKey, url, jsonUrl, data;
-  return regeneratorRuntime.async(function _callee$(_context2) {
+  return regeneratorRuntime.async(function _callee$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           pinataApiKey = process.env.pinataApiKey;
           pinataSecretApiKey = process.env.pinataSecretApiKey;
@@ -146,7 +144,7 @@ document.getElementById("nft-file-input").addEventListener("change", function _c
 
         case 7:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });
@@ -161,16 +159,16 @@ document.querySelector(".nes-textarea").addEventListener("change", function (res
 });
 document.getElementById("Submit").addEventListener("click", function _callee2() {
   var mintNFT;
-  return regeneratorRuntime.async(function _callee2$(_context4) {
+  return regeneratorRuntime.async(function _callee2$(_context5) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           console.log(NFTDescription, NFTName, contract, metadata_hash);
 
           mintNFT = function mintNFT(tokenURI) {
-            return regeneratorRuntime.async(function mintNFT$(_context3) {
+            return regeneratorRuntime.async(function mintNFT$(_context4) {
               while (1) {
-                switch (_context3.prev = _context3.next) {
+                switch (_context4.prev = _context4.next) {
                   case 0:
                     ethereum.request({
                       method: "eth_sendTransaction",
@@ -190,7 +188,7 @@ document.getElementById("Submit").addEventListener("click", function _callee2() 
 
                   case 1:
                   case "end":
-                    return _context3.stop();
+                    return _context4.stop();
                 }
               }
             });
@@ -202,7 +200,7 @@ document.getElementById("Submit").addEventListener("click", function _callee2() 
 
         case 5:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   });

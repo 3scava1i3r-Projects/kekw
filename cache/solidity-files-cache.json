@@ -728,8 +728,8 @@
       ]
     },
     "/home/juuzou/Documents/defi-summer/kekw/contracts/MemeNFT.sol": {
-      "lastModificationDate": 1628798194162,
-      "contentHash": "66072833ae7028fe7fa36f913326eafa",
+      "lastModificationDate": 1628867200359,
+      "contentHash": "b70f7dac6f551ccbe6a329132da5d0f6",
       "sourceName": "contracts/MemeNFT.sol",
       "solcConfig": {
         "version": "0.8.4",

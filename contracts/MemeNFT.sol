@@ -21,7 +21,7 @@ contract MemeNFT is ERC721 {
     
     function createItem (string memory _uri) public returns(uint256){
         _tokenId.increment();
-        uint256 newItemId   = _tokenId.current();
+        uint256 newItemId = _tokenId.current();
         _safeMint(msg.sender, newItemId);
         
         Items[newItemId] = Item(newItemId ,msg.sender , _uri);

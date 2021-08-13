@@ -4,17 +4,6 @@ const test = document.getElementById("test");
 const meme = document.getElementById("meme-image");
 
 
-const contractAddress = "0x248dD7b699042C53fAc61A8f4efA15f413E5477b";
-
-let contract_json;
-fetch("../artifacts/MyNFT.json")
-  .then((res) => res.json())
-  .then((result) => {
-    contract_json = result;
-  });
-
-const Web3Modal = window.Web3Modal.default;
-const WalletConnectProvider = window.WalletConnectProvider.default;
 let selectedACC;
 let metadata_hash = null;
 let nonce_needed = null
@@ -23,52 +12,44 @@ let NFTName = null;
 let NFTDescription = null;
 
 
+const Token_Contract_Address = "0x514066a543d8Df91680b140d1d5190396cA37Eeb";
 
+window.Moralis.initialize("BApP9VWLd91SiQd7M9StIowCFEZanTTzNPohj9HR");
+window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
+
+
+const init = async() => {
+  window.web3 = await Moralis.Web3.enable();
+  window.tokenContract = new web3.eth.Contract(MemeABI , Token_Contract_Address)
+  
+}
+
+init();
 
 const ConnectWallet = async () => {
-  const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId: "d4c7101b7a7e45fd8adaaf71881b6be4", // required
-      },
-    },
-    portis: {
-      package: Portis, // required
-      options: {
-        id: "b7d059de-0fea-4fbf-a725-143562297c30", // required
-      },
-    },
-  };
+  
+  try {
+      
+    window.tokenContract = new web3.eth.Contract(MemeABI , Token_Contract_Address)
+    let user = await Moralis.Web3.authenticate()
+    
+    if(user){
+      const accounts = await web3.eth.getAccounts();
+      const chainId = await web3.eth.net.getId();
+      selectedACC = accounts[0];
+      acc.innerText = selectedACC;
+    }
 
-  const web3Modal = new Web3Modal({
-    providerOptions, // required
-  });
-
-  const provider = await web3Modal.connect();
-  const web3 = new Web3(provider);
-  const accounts = await web3.eth.getAccounts();
-  const chainId = await web3.eth.net.getId();
-  console.log(chainId);
-  selectedACC = accounts[0];
-  acc.innerText = selectedACC;
-
-  const nftContract = new web3.eth.Contract(contract_json.abi, contractAddress);
-  contract = nftContract;
-  console.log(contract)
-  const nonce = await web3.eth.getTransactionCount(
-    selectedACC,
-    "latest"
-  )
-
-  nonce_needed = nonce.toString();
-
-  if ((selectedACC != null) | undefined) {
-    console.log(selectedACC);
-  } else {
-    console.log("yo! connect the damn wallet");
+    if ((selectedACC != null) | undefined) {
+      console.log(selectedACC);
+    } else {
+      console.log("yo! connect the damn wallet");
+    }
+  } catch (e) {
+    console.log(e)
   }
-};;
+  
+};
 
 web3btn.addEventListener("click", () => {
   ConnectWallet();
@@ -76,9 +57,9 @@ web3btn.addEventListener("click", () => {
 
 document.getElementById("nft-file-input").addEventListener("change", async (res) => {
   
-  const pinataApiKey = process.env.pinataApiKey; 
+  const pinataApiKey = ""; 
   const pinataSecretApiKey =
-    process.env.pinataSecretApiKey;
+    "";
   const url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
   const jsonUrl = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
@@ -121,7 +102,7 @@ document.getElementById("nft-file-input").addEventListener("change", async (res)
           let gg = `https://ipfs.io/ipfs/${res.data.IpfsHash}`
           metadata_hash = gg
           
-          swal("image uploaded")
+          swal("Good job!", "Image and Metadata Uploaded!", "success");
         })
     })
     .catch(function (error) {
@@ -146,31 +127,42 @@ document.querySelector(".nes-textarea").addEventListener("change", (res) => {
   
 document.getElementById("Submit").addEventListener("click" ,async() => {
   
-  console.log(NFTDescription, NFTName,contract ,(metadata_hash))
+  console.log(
+    NFTDescription,
+    NFTName,
+    tokenContract,
+    metadata_hash,
+    Token_Contract_Address
+  , ethereum.selectedAddress);
 
+
+  const nonce = await web3.eth.getTransactionCount(ethereum.selectedAddress, "latest");
+  nonce_needed = nonce.toString();
 
   const mintNFT = async(tokenURI) => {
+
+
+  //tokenContract.methods.createItem("tokenURI").send({from : ethereum.selectedAddress}).on('transactionHash' , (hash) => console.log(hash))
+
     ethereum
       .request({
         method: "eth_sendTransaction",
         params: [
           {
-            from: selectedACC,
-            to: contractAddress,
-            nonce: nonce_needed,
-            gas: "500000",
-            data: contract.methods.mintNFT(selectedACC, tokenURI).encodeABI(),
+            from: ethereum.selectedAddress,
+            to: Token_Contract_Address,
+            nonce:nonce_needed,
+            data: tokenContract.methods.createItem(tokenURI).encodeABI(),
           },
         ],
       })
       .then((result) => {
         console.log(result);
-        // The result varies by  RPC method.
-        // For example, this method will return a transaction hash hexadecimal string on success.
+        
       })
       .catch((error) => {
         console.log(error);
-      });
+      });  
   };
 
   mintNFT(metadata_hash);
