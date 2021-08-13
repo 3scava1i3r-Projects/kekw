@@ -57,9 +57,9 @@ web3btn.addEventListener("click", () => {
 
 document.getElementById("nft-file-input").addEventListener("change", async (res) => {
   
-  const pinataApiKey = ""; 
+  const pinataApiKey = "a770d310d147135d5ec4"; 
   const pinataSecretApiKey =
-    "";
+    "076b05a1c38c2910d32a8079e1007d52b8c02264990e0af61fa0e544cd760c78";
   const url = "https://api.pinata.cloud/pinning/pinFileToIPFS"
   const jsonUrl = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
