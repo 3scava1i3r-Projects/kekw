@@ -2,66 +2,33 @@
 
 var web3btn = document.getElementById("web3connect");
 var acc = document.getElementById("acc");
-var Web3Modal = window.Web3Modal["default"];
-var WalletConnectProvider = window.WalletConnectProvider["default"];
+var market_contract_address = "0xe29F63CdCF772b320Ee1075D9996873b3d2098Da";
 var selectedACC;
 var chainId;
+window.Moralis.initialize("BApP9VWLd91SiQd7M9StIowCFEZanTTzNPohj9HR");
+window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
 
-var ConnectWallet = function ConnectWallet() {
-  var providerOptions, web3Modal, provider, web3, accounts;
-  return regeneratorRuntime.async(function ConnectWallet$(_context) {
+var init = function init() {
+  var Items;
+  return regeneratorRuntime.async(function init$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          providerOptions = {
-            walletconnect: {
-              "package": WalletConnectProvider,
-              // required
-              options: {
-                infuraId: "d4c7101b7a7e45fd8adaaf71881b6be4" // required
+          _context.next = 2;
+          return regeneratorRuntime.awrap(Moralis.Web3.enable());
 
-              }
-            },
-            portis: {
-              "package": Portis,
-              // required
-              options: {
-                id: "b7d059de-0fea-4fbf-a725-143562297c30" // required
+        case 2:
+          window.web3 = _context.sent;
+          window.marketContract = new web3.eth.Contract(MarketABI, market_contract_address);
+          _context.next = 6;
+          return regeneratorRuntime.awrap(Moralis.Cloud.run("getItems"));
 
-              }
-            }
-          };
-          web3Modal = new Web3Modal({
-            providerOptions: providerOptions // required
+        case 6:
+          Items = _context.sent;
+          console.log(Items);
+          renderMarket(Items);
 
-          });
-          _context.next = 4;
-          return regeneratorRuntime.awrap(web3Modal.connect());
-
-        case 4:
-          provider = _context.sent;
-          web3 = new Web3(provider);
-          _context.next = 8;
-          return regeneratorRuntime.awrap(web3.eth.getAccounts());
-
-        case 8:
-          accounts = _context.sent;
-          _context.next = 11;
-          return regeneratorRuntime.awrap(web3.eth.net.getId());
-
-        case 11:
-          chainId = _context.sent;
-          console.log(chainId);
-          selectedACC = accounts[0];
-          acc.innerText = selectedACC;
-
-          if (selectedACC != null | undefined) {
-            console.log(selectedACC);
-          } else {
-            console.log("yo! connect the damn wallet");
-          }
-
-        case 16:
+        case 9:
         case "end":
           return _context.stop();
       }
@@ -69,18 +36,72 @@ var ConnectWallet = function ConnectWallet() {
   });
 };
 
+init();
+
+var ConnectWallet = function ConnectWallet() {
+  var user, accounts, _chainId;
+
+  return regeneratorRuntime.async(function ConnectWallet$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return regeneratorRuntime.awrap(Moralis.Web3.authenticate());
+
+        case 3:
+          user = _context2.sent;
+
+          if (!user) {
+            _context2.next = 13;
+            break;
+          }
+
+          _context2.next = 7;
+          return regeneratorRuntime.awrap(web3.eth.getAccounts());
+
+        case 7:
+          accounts = _context2.sent;
+          _context2.next = 10;
+          return regeneratorRuntime.awrap(web3.eth.net.getId());
+
+        case 10:
+          _chainId = _context2.sent;
+          selectedACC = accounts[0];
+          acc.innerText = selectedACC;
+
+        case 13:
+          if (selectedACC != null || undefined) {
+            console.log(selectedACC);
+          } else {
+            console.log("yo! connect the damn wallet");
+          }
+
+          _context2.next = 19;
+          break;
+
+        case 16:
+          _context2.prev = 16;
+          _context2.t0 = _context2["catch"](0);
+          console.log(_context2.t0);
+
+        case 19:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, null, null, [[0, 16]]);
+};
+
 web3btn.addEventListener("click", function () {
   ConnectWallet();
-  setTimeout(function () {
-    getNftBalance();
-  }, 2000);
 });
 
 var getNftBalance = function getNftBalance() {
   var options;
-  return regeneratorRuntime.async(function getNftBalance$(_context2) {
+  return regeneratorRuntime.async(function getNftBalance$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           options = {
             method: "GET"
@@ -107,18 +128,13 @@ var getNftBalance = function getNftBalance() {
               }
             });
           });
-          /* let Moralis = window.Moralis;
-           Moralis.initialize("qaLhTI9RB5qlTnmeWGChjHfPHVSV5innftpvJBmK");
-          Moralis.serverURL = "https://np6vdm0epmsi.moralisweb3.com:2053/server";
-          const testnetNFTs = await Moralis.Web3.getNFTs({
-            address: selectedACC,
-            chain: "binance",
-          }); */
 
         case 2:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });
 };
+
+var Market = function Market() {};

@@ -10,9 +10,13 @@ let nonce_needed = null
 let contract = null;
 let NFTName = null;
 let NFTDescription = null;
+let NFTPrice = null;
+let nftId = null;
 
 
 const Token_Contract_Address = "0x514066a543d8Df91680b140d1d5190396cA37Eeb";
+const market_contract_address = "0xe29F63CdCF772b320Ee1075D9996873b3d2098Da";
+
 
 window.Moralis.initialize("BApP9VWLd91SiQd7M9StIowCFEZanTTzNPohj9HR");
 window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
@@ -21,7 +25,12 @@ window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
 const init = async() => {
   window.web3 = await Moralis.Web3.enable();
   window.tokenContract = new web3.eth.Contract(MemeABI , Token_Contract_Address)
-  
+  window.marketContract = new web3.eth.Contract(
+    MarketABI,
+    market_contract_address
+  );
+
+  console.log(marketContract)
 }
 
 init();
@@ -112,16 +121,21 @@ document.getElementById("nft-file-input").addEventListener("change", async (res)
 });
 
 
-document.querySelector(".nes-input").addEventListener("change" , (r) => {
-  console.log(r.target.value)
-  NFTDescription = r.target.value;
-})
+document.getElementById("name_field").addEventListener("change", (r) => {
+  console.log(r.target.value);
+  NFTName = r.target.value;
+});
+
+document.getElementById("price_field").addEventListener("change", (r) => {
+  console.log(r.target.value);
+  NFTPrice = r.target.value;
+
+});
 
 
-
-document.querySelector(".nes-textarea").addEventListener("change", (res) => {
+document.getElementById("textarea_field").addEventListener("change", (res) => {
   console.log(res.target.value);
-  NFTName = res.target.value;
+  NFTDescription = res.target.value;
 });
 
   
@@ -132,19 +146,71 @@ document.getElementById("Submit").addEventListener("click" ,async() => {
     NFTName,
     tokenContract,
     metadata_hash,
-    Token_Contract_Address
-  , ethereum.selectedAddress);
+    Token_Contract_Address,
+    ethereum.selectedAddress);
 
+
+  nftId = await mintNFT(metadata_hash);
+
+  console.log(nftId)
+
+
+  document.getElementById("name_field").value = ""
+  document.getElementById("price_field").value = "";
+  document.getElementById("textarea_field").value = "";
+  
+
+  
+})
+
+document.getElementById("Submit-Sell").addEventListener("click" ,async() => {
+
+  try {
+    nftId = await mintNFT(metadata_hash);
+    
+    await ensureMarketApprove(nftId, Token_Contract_Address);
+    
+    await marketContract.methods
+      .addItemToMarket(nftId, Token_Contract_Address, NFTPrice)
+      .send({ from: ethereum.selectedAddress });
+
+      console.log(nftId, Token_Contract_Address, NFTPrice);
+      console.log(ethereum.selectedAddress);
+  } catch (e) {
+    console.log(e)
+  }
+
+  document.getElementById("name_field").value = "";
+  document.getElementById("price_field").value = "";
+  document.getElementById("textarea_field").value = "";
+  
+})
+
+
+const ensureMarketApprove = async (tokenId, tokenAddress) => {
+  let user = await Moralis.User.current();
+  const userAddress = user.get("ethAddress");
+  const contract = new web3.eth.Contract(MemeABI, tokenAddress);
+  const approvedAddress = await contract.methods.getApproved(tokenId).call({from: userAddress})
+  if(approvedAddress != market_contract_address)
+  {
+    await contract.methods.approve(market_contract_address , tokenId).send({from:ethereum.selectedAddress});
+
+  }
+
+};
+
+
+
+const mintNFT = async(tokenURI) => {
 
   const nonce = await web3.eth.getTransactionCount(ethereum.selectedAddress, "latest");
   nonce_needed = nonce.toString();
-
-  const mintNFT = async(tokenURI) => {
-
-
-  //tokenContract.methods.createItem("tokenURI").send({from : ethereum.selectedAddress}).on('transactionHash' , (hash) => console.log(hash))
-
-    ethereum
+  
+  let receipt = await tokenContract.methods.createItem(tokenURI).send({from : ethereum.selectedAddress})
+    
+    console.log(receipt);
+    /* ethereum
       .request({
         method: "eth_sendTransaction",
         params: [
@@ -162,14 +228,7 @@ document.getElementById("Submit").addEventListener("click" ,async() => {
       })
       .catch((error) => {
         console.log(error);
-      });  
+      });   */
+
+      return receipt.events.Transfer.returnValues.tokenId;
   };
-
-  mintNFT(metadata_hash);
-
-
-  document.querySelector(".nes-textarea").value = ""
-  document.querySelector(".nes-input").value = ""
-
-  
-})

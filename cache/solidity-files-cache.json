@@ -3503,6 +3503,42 @@
       "artifacts": [
         "console"
       ]
+    },
+    "/home/juuzou/Documents/defi-summer/kekw/contracts/Market.sol": {
+      "lastModificationDate": 1629016367390,
+      "contentHash": "08d6a9c08f30a31e8de1786fd97ab8de",
+      "sourceName": "contracts/Market.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./contracts/token/ERC721/IERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Market"
+      ]
     }
   }
 }

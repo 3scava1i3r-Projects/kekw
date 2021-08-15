@@ -47,32 +47,45 @@ const getAndRenderItemData = (item, renderFunction) => {
 
   item.map((res) => {
 
-    if(res.Metadata != null){
+    if(res.Metadata != null && res.Metadata.slice(0,4) == "http"){
+      
     fetch(res.Metadata)
-      .then((r) => {
-        if (r.status === 404) {
+      .then(async(r) => {
+        
+        r = await r.json()
+        console.log(r)
+        r.TokenId = res.TokenId;
+        renderFunction(r)
+        /* if (r.status != 404) {
+        let l = r.json();
+        
+        l.TokenId = res.TokenId;
+        console.log(l);
+        renderFunction(l);
+        
+          
+        } else {
           let l = {
             name: null,
             Info: {
               description: null,
               image: "https://lettertrein.be/images/Error/404.gif",
             },
-          }
+          };
           l.TokenId = res.TokenId;
+          console.log(l);
           renderFunction(l);
-          console.log(l)
-        } else {
-          let l = r.json();
-          l.TokenId = res.TokenId;
-          renderFunction(l);
-          console.log(l)
         }
+        */
+        
       })
+      /* .then((final) => console.log(final)) */
   }})
 };
 
 const RenderUserItems = (inputData) => {
   
+    
     const gg = document.getElementById("nft-balance");
 
     const content = `

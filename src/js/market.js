@@ -1,51 +1,58 @@
 const web3btn = document.getElementById("web3connect");
 const acc = document.getElementById("acc");
 
-const Web3Modal = window.Web3Modal.default;
-const WalletConnectProvider = window.WalletConnectProvider.default;
+const market_contract_address = "0xe29F63CdCF772b320Ee1075D9996873b3d2098Da";
+
+
+
 let selectedACC;
 let chainId;
 
+
+window.Moralis.initialize("BApP9VWLd91SiQd7M9StIowCFEZanTTzNPohj9HR");
+window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
+
+
+const init = async() => {
+  window.web3 = await Moralis.Web3.enable();
+  window.marketContract = new web3.eth.Contract(MarketABI , market_contract_address)
+  const Items = await Moralis.Cloud.run("getItems");
+  console.log(Items);
+  renderMarket(Items);
+}
+
+init();
+
+
+
 const ConnectWallet = async () => {
-  const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        infuraId: "d4c7101b7a7e45fd8adaaf71881b6be4", // required
-      },
-    },
-    portis: {
-      package: Portis, // required
-      options: {
-        id: "b7d059de-0fea-4fbf-a725-143562297c30", // required
-      },
-    },
-  };
+  
+  try {
+      
+    
+    let user = await Moralis.Web3.authenticate()
+    
+    if(user){
+      const accounts = await web3.eth.getAccounts();
+      const chainId = await web3.eth.net.getId();
+      selectedACC = accounts[0];
+      acc.innerText = selectedACC;
+    }
 
-  const web3Modal = new Web3Modal({
-    providerOptions, // required
-  });
-
-  const provider = await web3Modal.connect();
-  const web3 = new Web3(provider);
-  const accounts = await web3.eth.getAccounts();
-  chainId = await web3.eth.net.getId();
-  console.log(chainId);
-  selectedACC = accounts[0];
-  acc.innerText = selectedACC;
-
-  if ((selectedACC != null) | undefined) {
-    console.log(selectedACC);
-  } else {
-    console.log("yo! connect the damn wallet");
+    if ((selectedACC != null) || undefined) {
+      console.log(selectedACC);
+    } else {
+      console.log("yo! connect the damn wallet");
+    }
+  } catch (e) {
+    console.log(e)
   }
+
 };
 
 web3btn.addEventListener("click", () => {
   ConnectWallet();
-  setTimeout(() => {
-    getNftBalance();
-  }, 2000);
+  
 });
 
 const getNftBalance = async () => {
@@ -91,12 +98,10 @@ const getNftBalance = async () => {
       });
     });
 
-  /* let Moralis = window.Moralis;
-
-  Moralis.initialize("qaLhTI9RB5qlTnmeWGChjHfPHVSV5innftpvJBmK");
-  Moralis.serverURL = "https://np6vdm0epmsi.moralisweb3.com:2053/server";
-  const testnetNFTs = await Moralis.Web3.getNFTs({
-    address: selectedACC,
-    chain: "binance",
-  }); */
+  
 };
+
+
+const Market = () => {
+  
+}
