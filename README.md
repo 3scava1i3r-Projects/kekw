@@ -1,8 +1,11 @@
 
 
-#kekw
+# Kekw
 
 ain't that funny
+
+## What it does
+Kekw is a marketplace for buying and selling NFTs.We can also create normal memes and non-selling NFTs on the platform.Educates you about pepe the frog and helps you create memes
 
 ## Creating NFTs
 ![1](https://user-images.githubusercontent.com/52003051/129500364-132449fa-c58e-4e0d-a360-660380d6ebf8.png)
