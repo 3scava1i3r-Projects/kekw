@@ -180,6 +180,10 @@ document.getElementById("Submit-Sell").addEventListener("click" ,async() => {
     console.log(e)
   }
 
+
+            swal("Good job!", "Ooooooooo! We have a NFT now", "success");
+
+
   document.getElementById("name_field").value = "";
   document.getElementById("price_field").value = "";
   document.getElementById("textarea_field").value = "";

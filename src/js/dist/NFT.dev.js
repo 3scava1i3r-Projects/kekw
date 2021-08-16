@@ -222,11 +222,12 @@ document.getElementById("Submit-Sell").addEventListener("click", function _calle
           console.log(_context5.t0);
 
         case 15:
+          swal("Good job!", "Ooooooooo! We have a NFT now", "success");
           document.getElementById("name_field").value = "";
           document.getElementById("price_field").value = "";
           document.getElementById("textarea_field").value = "";
 
-        case 18:
+        case 19:
         case "end":
           return _context5.stop();
       }
