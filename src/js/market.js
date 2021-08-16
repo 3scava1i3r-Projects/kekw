@@ -4,10 +4,9 @@ const acc = document.getElementById("acc");
 const market_contract_address = "0xe29F63CdCF772b320Ee1075D9996873b3d2098Da";
 
 
-
 let selectedACC;
 let chainId;
-
+let length = null;
 
 window.Moralis.initialize("BApP9VWLd91SiQd7M9StIowCFEZanTTzNPohj9HR");
 window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
@@ -16,20 +15,21 @@ window.Moralis.serverURL = "https://eusqzv48jkaq.moralisweb3.com:2053/server";
 const init = async() => {
   window.web3 = await Moralis.Web3.enable();
   window.marketContract = new web3.eth.Contract(MarketABI , market_contract_address)
+  console.log(marketContract)
   const Items = await Moralis.Cloud.run("getItems");
   console.log(Items);
-  renderMarket(Items);
+
+  getAndRenderItemData(Items , renderMarket);
+
+  
+  
 }
 
 init();
 
-
-
 const ConnectWallet = async () => {
   
   try {
-      
-    
     let user = await Moralis.Web3.authenticate()
     
     if(user){
@@ -55,6 +55,8 @@ web3btn.addEventListener("click", () => {
   
 });
 
+
+/* 
 const getNftBalance = async () => {
   const options = { method: "GET" };
 
@@ -99,9 +101,85 @@ const getNftBalance = async () => {
     });
 
   
+}; */
+
+
+const renderMarket = async(index) => {
+
+
+  const gg = document.getElementById("market-area");
+  const content = `
+                        <div id="mcontainer">
+                            <div id="mcard" value=${index.uid}  class="market-card">
+                                <div id="content">
+                                <img src="${index.Info.image}" alt="NFT image" id="nftimg" >
+                                    <h2>${index.name}</h2>
+                                    <h3>Owner:${index.owner}</h3>
+                                    <h3 value=${index.askingPrice}>Price:${index.askingPrice}</h3>
+                                    <p>${index.Info.description}</p>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        `;
+  gg.innerHTML += content;
+
+
+  let x = document.getElementsByClassName("market-card");
+  
+  for (var i = 0; i < x.length; i++) {
+    x[i].addEventListener(
+      "click",
+      function () {
+        let selectedEl = document.querySelector(".selected");
+        if (selectedEl) {
+          selectedEl.classList.remove("selected");
+        }
+        this.classList.add("selected");
+      },
+      false
+    );
+  }
+
+  document.getElementById("select").addEventListener("click", function () {
+    
+    var selectedEl = document.querySelector(".selected");
+    if (selectedEl) {
+      console.log(selectedEl.childNodes[1].childNodes[7].attributes[0].value);
+      buyItem(selectedEl.attributes[1].value ,selectedEl.childNodes[1].childNodes[7].attributes[0].value );
+    } else alert("please choose an option");
+  });
+ 
+}
+
+
+const getAndRenderItemData = (item, renderFunction) => {
+  length = item.length;
+  item.map((res) => {
+    if (res.tokenUri != null && res.tokenUri.slice(0, 4) == "http") {
+      fetch(res.tokenUri)
+      .then(async (r) => {
+        r = await r.json();
+        r.uid = res.uid;
+        r.askingPrice = res.AskingPrice;
+        r.owner = res.ownerOf;
+        
+        renderFunction(r);
+
+      });      
+    }
+  });
 };
 
 
-const Market = () => {
-  
-}
+
+
+const buyItem = async (uid,price) => {
+  let user = await Moralis.User.current();
+  await marketContract.methods
+    .buyItem(uid)
+    .send({ from: user.get("ethAddress"), value: price });
+
+
+    console.log("ggwp")
+};
